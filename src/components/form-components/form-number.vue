@@ -10,7 +10,8 @@
       :precision="formOption.isInteger ? 0 : formOption.precision"
       :min="formOption.hasRange ? formOption.min : -Infinity"
       :max="formOption.hasRange ? formOption.max : Infinity"
-      :placeholder="placeholder"></a-input-number>
+      :placeholder="placeholder"
+      @change="handleChange"></a-input-number>
   </a-form-item>
 </template>
 
@@ -23,7 +24,7 @@
       default: () => ({}),
     },
     modelValue: {
-      type: Number,
+      type: [Number, String],
       default: null,
     },
     optKeyName: {
@@ -39,11 +40,11 @@
       default: 'fieldCode',
     },
   })
-  const emits = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue', 'change'])
 
   const value = computed({
     get() {
-      return props.modelValue
+      return Number(props.modelValue)
     },
     set(newValue) {
       emits('update:modelValue', newValue)
@@ -68,4 +69,7 @@
       : `请输入${intStr}`
     return str
   })
+  function handleChange(val) {
+    emits('change', val)
+  }
 </script>

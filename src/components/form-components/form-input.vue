@@ -8,8 +8,9 @@
     <a-textarea
       v-if="formOption.isTextarea"
       v-model="value"
-      :placeholder="formOption.placeholder"></a-textarea>
-    <a-input v-else v-model="value" :placeholder="formOption.placeholder"></a-input>
+      :placeholder="formOption.placeholder"
+      @change="handleChange" />
+    <a-input v-else v-model="value" :placeholder="formOption.placeholder" @change="handleChange" />
   </a-form-item>
 </template>
 
@@ -38,7 +39,7 @@
       default: 'fieldCode',
     },
   })
-  const emits = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue', 'change'])
 
   const value = computed({
     get() {
@@ -58,4 +59,7 @@
     }
     return rule
   })
+  function handleChange(val) {
+    emits('change', val)
+  }
 </script>

@@ -32,18 +32,40 @@ export function deleteComponentApi(params = {}) {
   return axios.get('/component/delete', { params })
 }
 // 获取构件内嵌关系列表
-export function getRrelationComponentListApi(params = {}) {
+export function getRelationComponentListApi(params = {}) {
   return axios.get('/component/relation/list', { params })
 }
 // 添加构件内嵌关系
-export function addRrelationComponentApi(data = {}) {
+export function addRelationComponentApi(data = {}) {
   return axios.post('/component/relation/add', data)
 }
 // 删除构件内嵌关系
-export function deleteRrelationComponentApi(data = {}) {
+export function deleteRelationComponentApi(data = {}) {
   return axios.post('/component/relation/deleteById', data)
 }
 // 更新构件内嵌关系
-export function updateRrelationComponentApi(data = {}) {
-  return axios.post('/component/relation/deleteById', data)
+export function updateRelationComponentApi(data = {}) {
+  return axios.post('/component/relation/update', data)
+}
+
+// 获取关联N7列表
+export function getRelationParamsApi(data = {}) {
+  return axios.post('/component/relation_params/list', data)
+}
+// 获取关联N7列表
+export function getRelationGoodsListApi(data = {}) {
+  return axios.post('/component/relation_goods/list', data)
+}
+
+// 获取关联UE模型列表
+export function getRelationUEModelListApi(data = {}) {
+  return axios.post('/component/relation_ue_model/list', data)
+}
+// 关联UE模型添加构件
+export function addComponentRelationUEModelApi(data = {}) {
+  return axios.post('/component/relation_ue_model/add', data)
+}
+// 更新UE模型链接
+export function updateRelationUEModelApi(data = {}) {
+  return axios.post('/component/relation_ue_model/update', data)
 }

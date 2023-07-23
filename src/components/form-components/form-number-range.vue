@@ -4,16 +4,16 @@
     :label="formDesc[nameKeyName]"
     :rules="rules"
     asterisk-position="end">
-    <a-input-number v-model="minValue" hide-button placeholder="最小值" />
+    <a-input-number v-model="minValue" hide-button placeholder="最小值" @change="handleChange" />
     ~
-    <a-input-number v-model="maxValue" hide-button placeholder="最大值" />
+    <a-input-number v-model="maxValue" hide-button placeholder="最大值" @change="handleChange" />
   </a-form-item>
 </template>
 
 <script lang="ts" setup>
   import { computed } from 'vue'
 
-  const emits = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue', 'change'])
   const props = defineProps({
     formDesc: {
       type: Object,
@@ -69,4 +69,7 @@
     }
     return rule
   })
+  function handleChange(val) {
+    emits('change', val)
+  }
 </script>

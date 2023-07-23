@@ -2,7 +2,7 @@ import { ref, reactive } from 'vue'
 import { getBusinessParamListApi } from '@/api/standardManage'
 import { getBusinessDataListApi } from '@/api/typeManage'
 
-export default function useGetListSimple(reqBody, setLoading) {
+export default function useGetListSimple(reqBody, setLoading?) {
   const columnData: any = ref([])
   const listData: any = ref([])
   const pagination = reactive({
@@ -12,9 +12,9 @@ export default function useGetListSimple(reqBody, setLoading) {
     showTotal: true,
     showPageSize: true,
   })
-  async function getColumnData() {
+  async function getColumnData(body = null) {
     try {
-      const res = await getBusinessParamListApi({ module: reqBody.module })
+      const res = await getBusinessParamListApi(body || { module: reqBody.module })
       columnData.value = res.data
     } catch (err) {
       //

@@ -7,7 +7,7 @@
         :first-node-id="secNodeData.pid"
         :category-module="categoryModule"
         :disable-shared="activeKey === 2" />
-      <a-spin :loading="loading">
+      <a-spin :loading="loading" style="width: 100%">
         <a-tabs v-model:active-key="activeKey" size="small" type="line" animation>
           <a-tab-pane :key="1" title="参数维护">
             <EditGroupList
@@ -21,17 +21,18 @@
                 materialListData,
               }" />
           </a-tab-pane>
-          <a-tab-pane
-            v-if="baseFormData.shared && baseFormData.tribeCode"
-            :key="2"
-            title="嵌套共享">
+          <!-- v-if="baseFormData.shared && baseFormData.tribeCode" -->
+          <a-tab-pane v-if="baseFormData.shared" :key="2" title="嵌套共享">
             <EditRelationInfo
-              v-if="baseFormData.shared"
+              v-if="baseFormData.shared && activeKey === 2"
               :main-tribe-code="baseFormData.tribeCode" />
           </a-tab-pane>
-          <a-tab-pane :key="3">
-            <template #title>Tab 3</template>
-            Content of Tab Panel 3
+          <a-tab-pane :key="3" title="关联N7参数值">
+            <EditRelationParams v-if="activeKey === 3" />
+          </a-tab-pane>
+          <a-tab-pane :key="4" title="关联UE材质"> </a-tab-pane>
+          <a-tab-pane :key="5" title="关联UE模型">
+            <EditRelationUEModel v-if="activeKey === 5" :main-tribe-code="baseFormData.tribeCode" />
           </a-tab-pane>
         </a-tabs>
       </a-spin>
@@ -65,6 +66,8 @@
   import EditBaseInfo from '../form/editBaseInfo.vue'
   import EditGroupList from '../form/editGroupList.vue'
   import EditRelationInfo from '../form/editRelationInfo.vue'
+  import EditRelationParams from '../form/editRelationParams.vue'
+  import EditRelationUEModel from '../form/editRelationUEModel.vue'
 
   interface valueType {
     id: string | number
@@ -149,33 +152,23 @@
   async function handleGlobalSave() {
     try {
       setLoading(true)
-      // await groupInfoRef.value.validateForm()
-      // await baseInfoRef.value.validateForm()
+      await groupInfoRef.value.validateForm()
+      await baseInfoRef.value.validateForm()
       const body: any = cloneDeep(baseFormData)
       stringifyJsonValue(body.jsonValue)
-      // body.jsonValue = JSON.stringify({
-      //   name: baseFormData.name,
-      //   shared: baseFormData.shared,
-      //   tribeCode: baseFormData.tribeCode,
-      //   image: baseFormData.image,
-      //   attachment: baseFormData.attachment,
-      //   ...body.jsonValue,
-      // })
-      console.log(
-        JSON.stringify({
-          name: baseFormData.name,
-          shared: baseFormData.shared,
-          tribeCode: baseFormData.tribeCode,
-          image: baseFormData.image,
-          attachment: baseFormData.attachment,
-          ...body.jsonValue,
-        })
-      )
-      // if (body.id) {
-      //   await updateComponentApi(body)
-      // } else {
-      //   await addComponentApi(body)
-      // }
+      body.jsonValue = JSON.stringify({
+        name: baseFormData.name,
+        shared: baseFormData.shared,
+        tribeCode: baseFormData.tribeCode,
+        image: baseFormData.image,
+        attachment: baseFormData.attachment,
+        ...body.jsonValue,
+      })
+      if (body.id) {
+        await updateComponentApi(body)
+      } else {
+        await addComponentApi(body)
+      }
       Message.success('保存成功')
     } catch (error) {
       // err

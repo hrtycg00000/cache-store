@@ -1,9 +1,9 @@
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import {
-  getRrelationComponentListApi,
-  addRrelationComponentApi,
-  deleteRrelationComponentApi,
-  updateRrelationComponentApi,
+  getRelationComponentListApi,
+  addRelationComponentApi,
+  deleteRelationComponentApi,
+  updateRelationComponentApi,
 } from '@/api/typeManage'
 
 export default function useRelationApi() {
@@ -11,38 +11,26 @@ export default function useRelationApi() {
 
   async function getTableData() {
     try {
-      const res = await getRrelationComponentListApi()
+      const res = await getRelationComponentListApi()
       tableData.value = res.data
     } catch (err) {
       //
     }
   }
-  async function addItem() {
-    try {
-      await addRrelationComponentApi()
-    } catch (err) {
-      //
-    }
+  async function addItem(body) {
+    await addRelationComponentApi(body)
   }
-  async function updateitem() {
-    try {
-      await updateRrelationComponentApi()
-    } catch (err) {
-      //
-    }
+  async function updateItem(body) {
+    await updateRelationComponentApi(body)
   }
   async function deleteItem(data) {
-    try {
-      await deleteRrelationComponentApi(data)
-    } catch (err) {
-      //
-    }
+    await deleteRelationComponentApi(data)
   }
   return {
     tableData,
     getTableData,
     addItem,
-    updateitem,
+    updateItem,
     deleteItem,
   }
 }

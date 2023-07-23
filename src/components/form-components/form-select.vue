@@ -11,7 +11,8 @@
       :filter-option="false"
       :allow-search="true"
       value-key="code"
-      @search="handleSearch">
+      @search="handleSearch"
+      @change="handleChange">
       <a-option v-for="(item, index) of selectList" :key="index" :label="item.name" :value="item" />
     </a-select>
   </a-form-item>
@@ -65,7 +66,7 @@
       default: 'fieldCode',
     },
   })
-  const emits = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue', 'change'])
   const { loading, setLoading } = useLoading()
 
   const value = computed({
@@ -132,6 +133,9 @@
     } else if (option.value.enumSource === 3) {
       getBusinessDataList(val)
     }
+  }
+  function handleChange(val) {
+    emits('change', val)
   }
   function init() {
     option.value = JSON.parse(props.formDesc[props.optKeyName])

@@ -1,5 +1,3 @@
-import { isString } from './is'
-
 export function initJsonValue(formItemList, keyName = 'fieldCode', valName = 'value') {
   function formatValue(item) {
     const map = {
@@ -41,6 +39,7 @@ export function initJsonValueModify(
   }
   return formItemList.map((item, index) => {
     if (formDataList[index]) {
+      formDataList[index].value = JSON.parse(formDataList[index].value)
       return formDataList[index]
     }
     return {
@@ -52,12 +51,9 @@ export function initJsonValueModify(
 }
 export function stringifyJsonValue(jsonValue = {}) {
   Object.keys(jsonValue).forEach((key) => {
-    console.log(key);
     if (jsonValue[key].length > 0) {
       jsonValue[key].forEach((item) => {
-        if (!isString(item.value)) {
-          item.value = JSON.stringify(item.value)
-        }
+        item.value = JSON.stringify(item.value)
       })
     }
   })

@@ -18,7 +18,7 @@
   import FormFlowCode from './form-flow-code.vue'
   import FormNumberRange from './form-number-range.vue'
   import FormNumber from './form-number.vue'
-  import FormControl from './form-control.vue';
+  import FormControl from './form-control.vue'
 
   const formItemMap = {
     1: FormSelect,

@@ -31,8 +31,8 @@ export default function useGetList(apiFn, reqBody) {
         pageNumber: pagination.current,
         pageSize: pagination.pageSize,
       })
-      listData.value = res.data
-      pagination.total = res.total
+      listData.value = res.data.data
+      pagination.total = res.data.total
     } catch (err) {
       //
     } finally {

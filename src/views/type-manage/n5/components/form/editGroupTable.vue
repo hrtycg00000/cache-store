@@ -6,9 +6,7 @@
       size="small"
       :data="listData"
       :pagination="false"
-      :bordered="true"
-      :scroll="{ y: '85%' }"
-      :scrollbar="true">
+      :bordered="true">
       <template #columns>
         <a-table-column title="参数项编码" data-index="code" ellipsis :width="120" />
         <a-table-column title="参数项名称" data-index="name" ellipsis :width="150">

@@ -27,11 +27,7 @@
       </a-select>
     </a-form-item>
     <template v-if="[1, 2].includes(formData.valueType)">
-      <EnumEditorSpecial
-        v-model="formData.value"
-        :disabled="!!modifyForm.id"
-        :dic-select-list="selectList"
-        value-key="value" />
+      <EnumEditorSpecial v-model="formData.value" :disabled="!!modifyForm.id" value-key="value" />
     </template>
     <template v-else-if="formData.valueType === 3">
       <InputEditor v-model="formData.value" :disabled="!!modifyForm.id" value-key="value" />
@@ -86,7 +82,6 @@
   import NumberEditor from '@/components/form-item-editor/number-editor.vue'
   import PipeCodeEditor from '@/components/form-item-editor/pipe-code-editor.vue'
   import ControlEditor from '@/components/form-item-editor/control-editor.vue'
-  import useGetTableSelectList from './hooks/getSelectList'
 
   interface valueType {
     id?: string | number
@@ -111,7 +106,6 @@
       default: false,
     },
   })
-  const { selectList, getSelectList } = useGetTableSelectList()
   const formData: valueType = reactive({
     state: 1,
     valueType: 1,
@@ -165,6 +159,7 @@
         enumSource: null,
         dicTypeId: null,
         module: null,
+        showKey: null,
         enumList: [{ name: '', code: '' }],
       }
     } else if (value === 3) {
@@ -191,7 +186,6 @@
     emits('changeStep', 'submit', { ...body })
   }
   function init() {
-    getSelectList()
     if (props.modifyForm.id) mergeFormData()
   }
   init()

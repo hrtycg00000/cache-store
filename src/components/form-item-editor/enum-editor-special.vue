@@ -5,7 +5,7 @@
     label-col-flex="70px"
     asterisk-position="end"
     :rules="rules">
-    <a-select v-model="formData.enumSource" :disabled="disabled">
+    <a-select v-model="formData.enumSource" :disabled="disabled" @change="sourceChange">
       <a-option :value="1" label="手动配置" />
       <a-option :value="2" label="字典值" />
       <a-option :value="3" label="K2类型值" />
@@ -51,11 +51,25 @@
       label-col-flex="70px"
       asterisk-position="end"
       :rules="rules">
-      <a-select v-model="formData.dicTypeId" :disabled="disabled">
+      <a-select v-model="formData.dicTypeId" :disabled="disabled" @change="dicTypeChange">
         <a-option
           v-for="item in dicSelectList"
           :key="item.id"
           :value="item.id"
+          :label="item.name" />
+      </a-select>
+    </a-form-item>
+    <a-form-item
+      :field="`${valueKey}.showKey`"
+      label="参数字段"
+      label-col-flex="70px"
+      asterisk-position="end"
+      :rules="rules">
+      <a-select v-model="formData.showKey" :loading="loading" :disabled="disabled">
+        <a-option
+          v-for="item in dicColumnList"
+          :key="item.id"
+          :value="item.fieldCode"
           :label="item.name" />
       </a-select>
     </a-form-item>
@@ -67,11 +81,25 @@
       label-col-flex="70px"
       asterisk-position="end"
       :rules="rules">
-      <a-select v-model="formData.module" :disabled="disabled">
+      <a-select v-model="formData.module" :disabled="disabled" @change="moduleChange">
         <a-option :value="0" label="N0" />
         <a-option :value="1" label="N1" />
         <a-option :value="2" label="N2" />
         <a-option :value="3" label="N3" />
+      </a-select>
+    </a-form-item>
+    <a-form-item
+      :field="`${valueKey}.showKey`"
+      label="参数字段"
+      label-col-flex="70px"
+      asterisk-position="end"
+      :rules="rules">
+      <a-select v-model="formData.showKey" :loading="loading" :disabled="disabled">
+        <a-option
+          v-for="item in moduleColumnList"
+          :key="item.id"
+          :value="item.fieldCode"
+          :label="item.name" />
       </a-select>
     </a-form-item>
   </template>
@@ -79,7 +107,11 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue'
+  import useLoading from '@/hooks/loading'
+  import useGetTableSelectList from '@/views/standard-manage/components/modal/hooks/getSelectList'
+  import useGetListSimple from '@/views/type-manage/hooks/getListSimple'
 
+  const emits = defineEmits(['update:modelValue'])
   const props = defineProps({
     modelValue: {
       type: Object,
@@ -89,19 +121,37 @@
       type: String,
       default: 'value',
     },
-    dicSelectList: {
-      type: Array<any>,
-      default: () => [],
-    },
     disabled: {
       type: Boolean,
       default: false,
     },
   })
-  const formData = computed(() => props.modelValue)
+  const formData = computed({
+    get() {
+      return props.modelValue
+    },
+    set(newValue) {
+      emits('update:modelValue', newValue)
+    },
+  })
+  const searchData = computed(() => ({ dictTypeId: props.modelValue.dicTypeId }))
   const rules = {
     required: true,
     message: '请填写',
+  }
+  const { loading, setLoading } = useLoading()
+  const {
+    selectList: dicSelectList,
+    tableColumnList: dicColumnList,
+    getSelectList,
+    getTableColumnList,
+  } = useGetTableSelectList(searchData.value)
+  const { columnData: moduleColumnList, getColumnData } = useGetListSimple(formData.value)
+  function sourceChange() {
+    formData.value.dicTypeId = null
+    formData.value.module = null
+    formData.value.showKey = null
+    formData.value.enumList = [{ name: '', code: '' }]
   }
   function addEnumItem() {
     formData.value.enumList.push({
@@ -112,4 +162,17 @@
   function removeEnumItem(index) {
     if (formData.value.enumList.length > 1) formData.value.enumList.splice(index, 1)
   }
+  async function dicTypeChange() {
+    setLoading(true)
+    await getTableColumnList()
+    formData.value.showKey = null
+    setLoading(false)
+  }
+  async function moduleChange() {
+    setLoading(true)
+    await getColumnData({ module: formData.value.module })
+    formData.value.showKey = null
+    setLoading(false)
+  }
+  getSelectList()
 </script>

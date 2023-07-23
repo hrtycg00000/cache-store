@@ -120,6 +120,7 @@
         enumSource: 1,
         dicTypeId: null,
         module: null,
+        showKey: null,
         enumList: [{ name: '', code: '' }],
       }
     } else if (value === 3) {
