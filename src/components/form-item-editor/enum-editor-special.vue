@@ -19,7 +19,7 @@
         label-col-flex="70px"
         asterisk-position="end"
         :rules="rules">
-        <a-input v-model="item.name" :disabled="disabled"></a-input>
+        <a-input v-model="item.name" :disabled="disabled && index < length"></a-input>
       </a-form-item>
       <a-form-item
         :field="`${valueKey}.enumList[${index}].code`"
@@ -27,10 +27,13 @@
         label-col-flex="70px"
         asterisk-position="end"
         :rules="rules">
-        <a-input v-model="item.code" :disabled="disabled" placeholder="请输入小驼峰"></a-input>
+        <a-input
+          v-model="item.code"
+          :disabled="disabled && index < length"
+          placeholder="英文或数字"></a-input>
       </a-form-item>
       <a-button
-        :disabled="formData.enumList.length <= 1 || disabled"
+        :disabled="(formData.enumList.length <= 1 || disabled) && index < length"
         size="small"
         @click="removeEnumItem(index)">
         <template #icon><icon-delete /></template>
@@ -42,6 +45,13 @@
         @click="addEnumItem">
         <template #icon><icon-plus /></template>
       </a-button>
+      <a-switch
+        v-model="item.state"
+        type="round"
+        checked-text="启用"
+        unchecked-text="停用"
+        :checked-value="1"
+        :unchecked-value="0" />
     </a-space>
   </template>
   <template v-else-if="formData.enumSource === 2">
@@ -106,7 +116,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue'
+  import { computed, watch } from 'vue'
   import useLoading from '@/hooks/loading'
   import useGetTableSelectList from '@/views/standard-manage/components/modal/hooks/getSelectList'
   import useGetListSimple from '@/views/type-manage/hooks/getListSimple'
@@ -134,6 +144,15 @@
       emits('update:modelValue', newValue)
     },
   })
+  let length = 0
+  watch(
+    () => props.disabled,
+    () => {
+      if (props.disabled) {
+        length = formData.value.enumList?.length || 0
+      }
+    }
+  )
   const searchData = computed(() => ({ dictTypeId: props.modelValue.dicTypeId }))
   const rules = {
     required: true,
@@ -151,12 +170,13 @@
     formData.value.dicTypeId = null
     formData.value.module = null
     formData.value.showKey = null
-    formData.value.enumList = [{ name: '', code: '' }]
+    formData.value.enumList = [{ name: '', code: '', state: 1 }]
   }
   function addEnumItem() {
     formData.value.enumList.push({
       name: '',
       code: '',
+      state: 1,
     })
   }
   function removeEnumItem(index) {

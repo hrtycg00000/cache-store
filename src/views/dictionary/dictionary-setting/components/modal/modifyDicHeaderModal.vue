@@ -88,7 +88,8 @@
       enumSource: 1,
       dicTypeId: null,
       module: null,
-      enumList: [{ name: '', code: '' }],
+      showKey: null,
+      enumList: [{ name: '', code: '', state: 1 }],
     },
   })
   const formRules = {
@@ -120,7 +121,7 @@
         dicTypeId: null,
         module: null,
         showKey: null,
-        enumList: [{ name: '', code: '' }],
+        enumList: [{ name: '', code: '', state: 1 }],
       }
     } else if (value === 3) {
       formData.value = { placeholder: '', isTextarea: 0 }

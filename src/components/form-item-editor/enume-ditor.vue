@@ -1,5 +1,5 @@
 <template>
-  <a-space v-for="(item, index) in formData.enumList" :key="index" align="start">
+  <a-space v-for="(item, index) in formData.enumList" :key="index" align="baseline">
     <a-form-item
       :field="`${valueKey}.enumList[${index}].name`"
       label="枚举名称"
@@ -16,7 +16,7 @@
       :rules="rules">
       <a-input
         v-model="item.code"
-        placeholder="请输入小驼峰"
+        placeholder="英文或数字"
         :disabled="disabled && index < length"></a-input>
     </a-form-item>
     <a-button
@@ -28,6 +28,13 @@
     <a-button v-if="index === formData.enumList.length - 1" size="small" @click="addEnumItem">
       <template #icon><icon-plus /></template>
     </a-button>
+    <a-switch
+      v-model="item.state"
+      type="round"
+      checked-text="启用"
+      unchecked-text="停用"
+      :checked-value="1"
+      :unchecked-value="0" />
   </a-space>
 </template>
 
@@ -66,6 +73,7 @@
     formData.value.enumList.push({
       name: '',
       code: '',
+      state: 1,
     })
   }
   function removeEnumItem(index) {

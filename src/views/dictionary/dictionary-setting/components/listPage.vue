@@ -63,7 +63,7 @@
   <modal
     v-model:visible="behaviorData.isShowModifyDicHeaderModal"
     :title="behaviorData.modalTitle"
-    width="600px">
+    width="670px">
     <template #main>
       <ModifyDicHeaderModal
         v-if="behaviorData.isShowModifyDicHeaderModal"
@@ -154,7 +154,8 @@
               enumSource: 1,
               dicTypeId: null,
               module: null,
-              enumList: [{ name: '', code: '' }],
+              showKey: null,
+              enumList: [{ name: '', code: '', state: 1 }],
             },
       })
     })

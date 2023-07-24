@@ -11,7 +11,10 @@
         <a-table-column title="参数项编码" data-index="code" ellipsis :width="120" />
         <a-table-column title="参数项名称" data-index="name" ellipsis :width="150">
           <template #cell="{ record }">
-            <p>{{ record.name }} <span v-if="record.isRequire" class="require-icon">*</span></p>
+            <p>
+              {{ record.name }}{{ record.unit ? `(${record.unit})` : '' }}
+              <span v-if="record.isRequire" class="require-icon">*</span>
+            </p>
           </template>
         </a-table-column>
         <a-table-column title="参数值" data-index="value">
