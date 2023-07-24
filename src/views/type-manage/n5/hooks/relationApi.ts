@@ -9,9 +9,9 @@ import {
 export default function useRelationApi() {
   const tableData: any = ref([])
 
-  async function getTableData() {
+  async function getTableData(body) {
     try {
-      const res = await getRelationComponentListApi()
+      const res = await getRelationComponentListApi(body)
       tableData.value = res.data
     } catch (err) {
       //

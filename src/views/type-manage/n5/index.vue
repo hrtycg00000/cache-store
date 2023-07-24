@@ -63,7 +63,7 @@
       listPageRef.value.getTableList()
       treeRef.value.treeRef.selectNode(treeList.value[0]?.subCategoryList[0].id)
     } catch (error) {
-      // err
+      console.log(error);
     } finally {
       setLoading(false)
     }

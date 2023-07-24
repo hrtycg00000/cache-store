@@ -21,16 +21,22 @@
                 materialListData,
               }" />
           </a-tab-pane>
-          <!-- v-if="baseFormData.shared && baseFormData.tribeCode" -->
-          <a-tab-pane v-if="baseFormData.shared" :key="2" title="嵌套共享">
+          <a-tab-pane
+            v-if="baseFormData.shared && baseFormData.tribeCode"
+            :key="2"
+            title="嵌套共享">
             <EditRelationInfo
               v-if="baseFormData.shared && activeKey === 2"
               :main-tribe-code="baseFormData.tribeCode" />
           </a-tab-pane>
           <a-tab-pane :key="3" title="关联N7参数值">
-            <EditRelationParams v-if="activeKey === 3" />
+            <EditRelationParams v-if="activeKey === 3" :main-tribe-code="baseFormData.tribeCode" />
           </a-tab-pane>
-          <a-tab-pane :key="4" title="关联UE材质"> </a-tab-pane>
+          <a-tab-pane :key="4" title="关联UE材质">
+            <EditRelationUEMaterial
+              v-if="activeKey === 4"
+              :main-tribe-code="baseFormData.tribeCode" />
+          </a-tab-pane>
           <a-tab-pane :key="5" title="关联UE模型">
             <EditRelationUEModel v-if="activeKey === 5" :main-tribe-code="baseFormData.tribeCode" />
           </a-tab-pane>
@@ -67,6 +73,7 @@
   import EditGroupList from '../form/editGroupList.vue'
   import EditRelationInfo from '../form/editRelationInfo.vue'
   import EditRelationParams from '../form/editRelationParams.vue'
+  import EditRelationUEMaterial from '../form/editRelationUEMaterial.vue'
   import EditRelationUEModel from '../form/editRelationUEModel.vue'
 
   interface valueType {

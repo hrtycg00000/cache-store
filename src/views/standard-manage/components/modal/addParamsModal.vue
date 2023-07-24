@@ -15,6 +15,7 @@
       :loading="loading"
       :modify-form="modifyForm"
       :has-param-group="mergeBody.subModule == 2"
+      v-bind="$attrs"
       @change-step="changeStep"
       @cancel="$emit('cancel')" />
   </keep-alive>
@@ -27,6 +28,7 @@
   import SelectParamForm from './selectParamForm.vue'
   import EditParamForm from './editParamForm.vue'
 
+  defineOptions({ inheritAttrs: false })
   const emits = defineEmits(['refresh', 'cancel'])
   const props = defineProps({
     module: Number,

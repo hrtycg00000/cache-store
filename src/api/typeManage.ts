@@ -40,8 +40,8 @@ export function addRelationComponentApi(data = {}) {
   return axios.post('/component/relation/add', data)
 }
 // 删除构件内嵌关系
-export function deleteRelationComponentApi(data = {}) {
-  return axios.post('/component/relation/deleteById', data)
+export function deleteRelationComponentApi(params = {}) {
+  return axios.get('/component/relation/deleteById', { params })
 }
 // 更新构件内嵌关系
 export function updateRelationComponentApi(data = {}) {
@@ -49,17 +49,26 @@ export function updateRelationComponentApi(data = {}) {
 }
 
 // 获取关联N7列表
-export function getRelationParamsApi(data = {}) {
-  return axios.post('/component/relation_params/list', data)
+export function getRelationParamsApi(params = {}) {
+  return axios.get('/component/queryCorrelationN7Attribute', { params })
 }
 // 获取关联N7列表
 export function getRelationGoodsListApi(data = {}) {
-  return axios.post('/component/relation_goods/list', data)
+  return axios.post('/component/filterCorrelationN7Attribute', data)
 }
 
 // 获取关联UE模型列表
-export function getRelationUEModelListApi(data = {}) {
-  return axios.post('/component/relation_ue_model/list', data)
+export function getUEMaterialGroupingAttributeApi(params = {}) {
+  return axios.get('/component/queryMaterialAttribute', { params })
+}
+
+// 获取关联UE模型列表
+export function getRelationUEModelListApi(params = {}) {
+  return axios.get('/component/queryCommodityManagementUeModel', { params })
+}
+// 根据N5构件编码查询构件数据
+export function getRelationComponentListForUEApi(params = {}) {
+  return axios.get('/component/queryComponentDataRelationship', { params })
 }
 // 关联UE模型添加构件
 export function addComponentRelationUEModelApi(data = {}) {
@@ -67,5 +76,5 @@ export function addComponentRelationUEModelApi(data = {}) {
 }
 // 更新UE模型链接
 export function updateRelationUEModelApi(data = {}) {
-  return axios.post('/component/relation_ue_model/update', data)
+  return axios.post('/component/addCommodityManagementUeModel', data)
 }

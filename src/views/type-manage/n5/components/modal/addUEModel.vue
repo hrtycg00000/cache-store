@@ -1,8 +1,9 @@
 <template>
   <a-table
-    row-key="childTribeCode"
+    row-key="tribeCode"
     size="small"
     style="margin-bottom: 15px"
+    :loading="loading"
     :data="tableData"
     :row-selection="{ type: 'checkbox', title: '选择' }"
     :bordered="true"
@@ -10,10 +11,8 @@
     :scrollbar="true"
     @select="handleTableSelect">
     <template #columns>
-      <a-table-column title="族类型编码" data-index="childTribeCode" :width="110" />
-      <a-table-column title="构件名称" data-index="childComponentName" />
-      <a-table-column title="构件一级分类名称" data-index="mainTribeName" :width="150" />
-      <a-table-column title="构件二级分类名称" data-index="secTribeName" :width="150" />
+      <a-table-column title="族类型编码" data-index="tribeCode" :width="110" />
+      <a-table-column title="构件名称" data-index="tribeName" />
     </template>
   </a-table>
   <a-space fill style="justify-content: flex-end">
@@ -25,17 +24,29 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import { difference, remove } from 'lodash'
+  import { Message } from '@arco-design/web-vue'
   import useLoading from '@/hooks/loading'
-  import useRelationApi from '@/views/type-manage/n5/hooks/relationApi'
-  import { addComponentRelationUEModelApi } from '@/api/typeManage'
+  import { getRelationComponentListForUEApi } from '@/api/typeManage'
 
-  const emits = defineEmits(['refresh', 'cancel'])
+  const emits = defineEmits(['cancel', 'submit'])
+  const { loading, setLoading } = useLoading()
   const { loading: btnLoading, setLoading: setBtnLoading } = useLoading()
   const props = defineProps({
     mainTribeCode: String,
   })
   const selectedList = ref([])
-  const { tableData, getTableData } = useRelationApi()
+  const tableData = ref([])
+  async function getTableList() {
+    try {
+      setLoading(true)
+      const res = await getRelationComponentListForUEApi({ tribeCode: props.mainTribeCode })
+      tableData.value = res.data
+    } catch (error) {
+      //
+    } finally {
+      setLoading(false)
+    }
+  }
   function handleTableSelect(rowKeys, rowKey, record) {
     if (rowKeys.length > selectedList.value.length) {
       selectedList.value.push({
@@ -49,19 +60,14 @@
     }
   }
   async function handleAdd() {
-    try {
-      setBtnLoading(true)
-      await addComponentRelationUEModelApi(selectedList.value)
-      emits('cancel')
-      emits('refresh')
-    } catch (error) {
-      //
-    } finally {
-      setBtnLoading(false)
+    if (selectedList.value.length <= 0) {
+      Message.warning('请选择构件')
+      return
     }
+    emits('submit', selectedList.value, setBtnLoading)
   }
-  async function init() {
-    getTableData()
+  function init() {
+    getTableList()
   }
   init()
 </script>

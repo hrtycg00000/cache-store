@@ -60,7 +60,6 @@
   import { reactive } from 'vue'
   import { cloneDeep } from 'lodash'
   import useLoading from '@/hooks/loading'
-  import { isArray } from '@/utils/is'
   import { addDicHeaderApi, modifyDicHeaderApi } from '@/api/dictionary'
   import EnumEditor from '@/components/form-item-editor/enume-ditor.vue'
   import PipeCodeEditor from '@/components/form-item-editor/pipe-code-editor.vue'

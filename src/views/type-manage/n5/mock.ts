@@ -185,32 +185,32 @@ setupMock({
         },
       ])
     })
-    Mock.mock(new RegExp('/component/relation_ue_model/list'), () => {
+    Mock.mock(new RegExp('/component/queryCommodityManagementUeModel'), () => {
       return successResponseWrap([
         {
           id: 1,
-          thirdCategoryName: '窗',
-          thirdCategoryCode: 'N7001',
-          children: [
+          threeCommodityName: '窗',
+          threeCommodityCode: 'N7001',
+          componentAttbuteDataRspList: [
             {
-              name: '窗框型号',
+              tribeName: '窗框型号',
               tribeCode: 'EL.0002',
-              paramName: '执手形状',
-              children: [
+              paramValueString: '执手形状',
+              paramValueList: [
                 {
                   paramValue: '香槟弧形',
-                  UEModelUrl: '',
+                  ueModelUrl: null,
                 },
               ],
             },
             {
-              name: '玻璃型号',
+              tribeName: '玻璃型号',
               tribeCode: 'EL.0003',
-              paramName: '执手颜色',
+              paramValueString: '执手颜色',
               children: [
                 {
                   paramValue: '香槟弧形',
-                  UEModelUrl: '',
+                  ueModelUrl: null,
                 },
               ],
             },

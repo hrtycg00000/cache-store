@@ -7,7 +7,7 @@
     <a-select
       v-model="value"
       :loading="loading"
-      :multiple="formDesc.valueType === 2"
+      :multiple="formDesc[typeKeyName] === 2"
       :filter-option="false"
       :allow-search="true"
       value-key="code"
@@ -48,6 +48,10 @@
     formDesc: {
       type: Object,
       default: () => ({}),
+    },
+    typeKeyName: {
+      type: String,
+      default: 'valueType',
     },
     modelValue: {
       type: [String, Array, Object],

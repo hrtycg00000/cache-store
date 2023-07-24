@@ -40,7 +40,6 @@
       :data="listData"
       :pagination="false"
       :bordered="true"
-      :expandable="expandable"
       :scroll="{ y: '85%' }"
       :scrollbar="true">
       <template #columns>
@@ -97,13 +96,6 @@
   import { getSecCategoryApi } from '@/api/categoryTree'
   import EditSecNodeModal from './modal/editSecNodeModal.vue'
 
-  const expandable = reactive({
-    title: 'Expand',
-    width: 80,
-    expandedRowRender: (record) => {
-      return `My Name is ${record.name}`
-    },
-  })
   const props = defineProps({
     categoryModule: {
       type: Number,

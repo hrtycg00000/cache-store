@@ -72,7 +72,7 @@
     </a-table>
   </a-card>
   <drawer
-    :width="1040"
+    :width="1240"
     :visible="behaviorData.isShow"
     @ok="behaviorData.isShow = false"
     @cancel="handleCancelModal">

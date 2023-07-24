@@ -21,11 +21,13 @@
     <template #columns>
       <a-table-column title="族类型编码" data-index="childTribeCode" :width="110" />
       <a-table-column title="构件名称" data-index="childComponentName" />
-      <a-table-column title="构件一级分类名称" data-index="mainTribeName" :width="150" />
-      <a-table-column title="构件二级分类名称" data-index="secTribeName" :width="150" />
       <a-table-column title="UE可否单独选到" align="center" :width="150">
         <template #cell="{ record }">
-          <a-select v-model="record.ueSelect" :loading="loading" @change="handleChange(record)">
+          <a-select
+            v-model="record.ueSelect"
+            size="small"
+            :loading="loading"
+            @change="handleChange(record)">
             <a-option :value="1" label="是" />
             <a-option :value="0" label="否" />
           </a-select>
@@ -51,7 +53,7 @@
         v-if="behaviorData.isShowAddModal"
         ref="modalRef"
         :main-tribe-code="mainTribeCode"
-        @refresh="getTableData"
+        @refresh="handleRefresh"
         @cancel="behaviorData.isShowAddModal = false" />
     </template>
   </modal>
@@ -64,7 +66,7 @@
   import useRelationApi from '@/views/type-manage/n5/hooks/relationApi'
   import AddRelationComponent from '../modal/addRelationComponent.vue'
 
-  defineProps({
+  const props = defineProps({
     mainTribeCode: String,
   })
   const { loading, setLoading } = useLoading()
@@ -81,20 +83,22 @@
       await updateItem(item)
       Message.success('修改成功')
     } catch (error) {
-      getTableData()
+      getTableData({ mainTribeCode: props.mainTribeCode })
     } finally {
       setLoading(false)
     }
   }
-  async function handleDelete(id, done) {
+  async function handleDelete(item, done) {
     try {
-      await deleteItem({ id })
-      getTableData()
+      await deleteItem({ id: item.id })
+      getTableData({ mainTribeCode: props.mainTribeCode })
       done()
     } catch (err) {
       done(false)
     }
   }
-
-  getTableData()
+  function handleRefresh() {
+    getTableData({ mainTribeCode: props.mainTribeCode })
+  }
+  getTableData({ mainTribeCode: props.mainTribeCode })
 </script>

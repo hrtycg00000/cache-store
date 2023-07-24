@@ -55,6 +55,7 @@
           categoryId: baseFormData.id,
           subModule: behaviorData.subModule,
         }"
+        :value-type-options="valueTypeOptions"
         @refresh="getList"
         @cancel="behaviorData.isShowAddParamsModal = false" />
     </template>
@@ -69,6 +70,13 @@
   import TableBase from '@/views/standard-manage/components/table/tableBase.vue'
   import AddParamsModal from '@/views/standard-manage/components/modal/addParamsModal.vue'
 
+  const valueTypeOptions = [
+    { value: 1, label: '枚举单选' },
+    { value: 3, label: '文本输入' },
+    { value: 4, label: '范围输入' },
+    { value: 6, label: '数值输入' },
+    { value: 7, label: '管控' },
+  ]
   const props = defineProps({
     categoryModule: {
       type: Number,

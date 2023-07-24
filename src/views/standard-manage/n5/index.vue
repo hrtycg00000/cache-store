@@ -13,7 +13,7 @@
     </a-layout-content>
     <modal
       v-model:visible="behaviorData.isShowAddDictionaryModal"
-      :title="commonData.editDictionaryData.id ? '编辑字典' : '新增字典'">
+      :title="commonData.editDictionaryData.id ? '编辑分类' : '新增分类'">
       <template #main>
         <EditTreeNodeModal
           v-if="behaviorData.isShowAddDictionaryModal"

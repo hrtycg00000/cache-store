@@ -17,13 +17,11 @@
         v-model="formData.valueType"
         :disabled="!!modifyForm.id"
         @change="hanleValueTypeChange">
-        <a-option :value="1" label="枚举单选" />
-        <a-option :value="2" label="枚举多选" />
-        <a-option :value="3" label="文本输入" />
-        <a-option :value="4" label="范围输入" />
-        <a-option :value="5" label="流水码" />
-        <a-option :value="6" label="数值输入" />
-        <a-option :value="7" label="管控" />
+        <a-option
+          v-for="item in valueTypeOptions"
+          :key="item.value"
+          :value="item.value"
+          :label="item.label" />
       </a-select>
     </a-form-item>
     <template v-if="[1, 2].includes(formData.valueType)">
@@ -104,6 +102,18 @@
     hasParamGroup: {
       type: Boolean,
       default: false,
+    },
+    valueTypeOptions: {
+      type: Array<any>,
+      default: () => [
+        { value: 1, label: '枚举单选' },
+        { value: 2, label: '枚举多选' },
+        { value: 3, label: '文本输入' },
+        { value: 4, label: '范围输入' },
+        { value: 5, label: '流水码' },
+        { value: 6, label: '数值输入' },
+        { value: 7, label: '管控' },
+      ],
     },
   })
   const formData: valueType = reactive({

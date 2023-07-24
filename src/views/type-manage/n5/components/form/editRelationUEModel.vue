@@ -1,16 +1,23 @@
 <template>
-  <a-table row-key="id" size="small" :data="tableData" :pagination="false" :bordered="true">
+  <a-table
+    row-key="threeCommodityCode"
+    size="small"
+    :data="tableData"
+    :pagination="false"
+    :bordered="true">
     <template #columns>
       <a-table-column
         title="商品三级分类名称"
-        data-index="thirdCategoryName"
+        data-index="threeCommodityName"
         ellipsis
-        :width="150" />
+        tooltip
+        :width="100" />
       <a-table-column
         title="商品三级分类编码"
-        data-index="thirdCategoryCode"
+        data-index="threeCommodityCode"
         ellipsis
-        :width="150" />
+        tooltip
+        :width="100" />
       <a-table-column
         title="族类型编码"
         data-index="tribeCode"
@@ -19,7 +26,7 @@
         :tooltip="true">
         <template #cell="{ record }">
           <a-button
-            v-if="!record.tribeCode && record.thirdCategoryCode"
+            v-if="!record.tribeCode && record.threeCommodityCode"
             type="primary"
             size="mini"
             @click="openAddModal(record)">
@@ -30,14 +37,19 @@
           </template>
         </template>
       </a-table-column>
-      <a-table-column title="构件名称" data-index="name" ellipsis :width="100" />
-      <a-table-column title="N7参数项" data-index="paramName" ellipsis :width="100" />
-      <a-table-column title="N7参数值" data-index="paramValue" ellipsis :width="100" />
-      <a-table-column title="UE模型连接" data-index="UEModelUrl" :width="170">
+      <a-table-column title="构件名称" data-index="tribeName" ellipsis tooltip :width="100" />
+      <a-table-column
+        title="N7参数项"
+        data-index="paramValueString"
+        ellipsis
+        tooltip
+        :width="120" />
+      <a-table-column title="N7参数值" data-index="paramValue" ellipsis tooltip :width="150" />
+      <a-table-column title="UE模型连接" data-index="ueModelUrl">
         <template #cell="{ record }">
           <a-input
-            v-if="record.UEModelUrl || record.UEModelUrl === ''"
-            v-model="record.UEModelUrl"
+            v-if="record.ueModelUrl || record.ueModelUrl === null"
+            v-model="record.ueModelUrl"
             size="small"
             @change="handleChenge" />
         </template>
@@ -50,7 +62,7 @@
         v-if="behaviorData.isShowAddModal"
         ref="modalRef"
         :main-tribe-code="mainTribeCode"
-        @refresh="getTableList"
+        @submit="handleAddSubmit"
         @cancel="behaviorData.isShowAddModal = false" />
     </template>
   </modal>
@@ -59,10 +71,14 @@
 <script lang="ts" setup>
   import { ref, reactive } from 'vue'
   import { Message } from '@arco-design/web-vue'
-  import { getRelationUEModelListApi, updateRelationUEModelApi } from '@/api/typeManage'
+  import {
+    getRelationUEModelListApi,
+    updateRelationUEModelApi,
+    addComponentRelationUEModelApi,
+  } from '@/api/typeManage'
   import AddUEModel from '../modal/addUEModel.vue'
 
-  defineProps({
+  const props = defineProps({
     mainTribeCode: String,
   })
   const tableData = ref([])
@@ -71,8 +87,16 @@
   })
   async function getTableList() {
     try {
-      const res = await getRelationUEModelListApi()
-      tableData.value = res.data
+      const res = await getRelationUEModelListApi({ tribeCode: props.mainTribeCode })
+      tableData.value = res.data.map((itemO) => {
+        itemO?.componentAttbuteDataRspList?.forEach((itemI) => {
+          itemI.children = itemI.paramValueList
+        })
+        return {
+          ...itemO,
+          children: itemO.componentAttbuteDataRspList,
+        }
+      })
     } catch (error) {
       //
     }
@@ -86,6 +110,18 @@
       Message.success('修改成功')
     } catch (error) {
       getTableList()
+    }
+  }
+  async function handleAddSubmit(value, done) {
+    try {
+      done(true)
+      await addComponentRelationUEModelApi(value.value)
+      behaviorData.isShowAddModal = false
+      getTableList()
+    } catch (error) {
+      //
+    } finally {
+      done(false)
     }
   }
   async function init() {
